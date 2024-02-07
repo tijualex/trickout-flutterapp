@@ -134,7 +134,7 @@ class PageOne extends StatelessWidget {
         }),
       );
     } else {
-      print('No user is currently signed in.');
+      // print('No user is currently signed in.');
     }
   }
 }
