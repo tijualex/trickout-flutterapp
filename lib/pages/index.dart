@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/components/item_tile.dart';
+import 'user_profile.dart';
+
 
 class PageOne extends StatelessWidget {
   // Example list of static items
@@ -42,7 +45,7 @@ class PageOne extends StatelessWidget {
             icon: Icon(Icons.person),
             onPressed: () {
               // Handle profile option
-              print('Profile option selected');
+              navigateToUserProfilePage(context);
             },
           ),
           IconButton(
@@ -61,7 +64,7 @@ class PageOne extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
-              "Let's create something unique for you",
+              "Let's create something unique",
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
@@ -116,4 +119,23 @@ class PageOne extends StatelessWidget {
       ),
     );
   }
+  
+    // Navigate to UserProfilePage with the user ID
+    void navigateToUserProfilePage(BuildContext context) {
+    // Get the currently authenticated user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Navigate to UserProfilePage with the user ID
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return UserProfilePage(uid: user.uid);
+        }),
+      );
+    } else {
+      print('No user is currently signed in.');
+    }
+  }
 }
+
