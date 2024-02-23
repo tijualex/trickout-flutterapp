@@ -14,7 +14,7 @@ class ItemTile extends StatelessWidget {
     required this.itemName,
     required this.itemPrice,
     required this.imagePath,
-    required this.color,
+    this.color = Colors.white,
     required this.onPressed,
   });
 
@@ -25,7 +25,7 @@ class ItemTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: color[100],
+          color: color,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

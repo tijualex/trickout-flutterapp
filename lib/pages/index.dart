@@ -1,28 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/components/item_tile.dart';
 import 'user_profile.dart';
 
-
 class PageOne extends StatelessWidget {
-  // Example list of static items
-  List<Map<String, dynamic>> _staticItemList = [
-    {
-      'name': 'Shirts',
-      'price': '20.00',
-      'imagePath': 'assets/item1.png',
-      'color': Colors.blue,
-    },
-    {
-      'name': 'Gowns',
-      'price': '30.00',
-      'imagePath': 'assets/item2.png',
-      'color': Colors.green,
-    },
-    // Add more items as needed
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +42,6 @@ class PageOne extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Let's order fresh items for you
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
@@ -71,57 +52,31 @@ class PageOne extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
-
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Divider(),
           ),
-
           const SizedBox(height: 24),
-
-          // categories -> horizontal listview
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
               "Dress Types",
               style: TextStyle(
                 fontSize: 18,
-                //fontWeight: FontWeight.bold,
               ),
             ),
           ),
-
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(12),
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _staticItemList.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.2,
-              ),
-              itemBuilder: (context, index) {
-                return ItemTile(
-                  itemName: _staticItemList[index]['name'],
-                  itemPrice: _staticItemList[index]['price'],
-                  imagePath: _staticItemList[index]['imagePath'],
-                  color: _staticItemList[index]['color'],
-                  onPressed: () {
-                    // Your logic when the item is pressed
-                  },
-                );
-              },
-            ),
+            child: DressTypeList(),
           ),
         ],
       ),
     );
   }
-  
-    // Navigate to UserProfilePage with the user ID
-    void navigateToUserProfilePage(BuildContext context) {
+}
+
+   void navigateToUserProfilePage(BuildContext context) {
     // Get the currently authenticated user
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -137,5 +92,64 @@ class PageOne extends StatelessWidget {
       // print('No user is currently signed in.');
     }
   }
+
+class DressTypeList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('dress_type').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Text('No dress types available.');
+        } else {
+          var dressTypes = snapshot.data!.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+            return DressType(
+              imageUrl: data['imagePath'] ?? '',
+              name: data['name'] ?? '',
+              price: data['min_price'] ?? 0,
+            );
+          }).toList();
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(12),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: dressTypes.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1 / 1.2,
+            ),
+            itemBuilder: (context, index) {
+              var dressType = dressTypes[index];
+              return ItemTile(
+                itemName: dressType.name,
+                itemPrice: dressType.price.toString(),
+                imagePath: dressType.imageUrl,
+                onPressed: () {
+                  // Your logic when the item is pressed
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+    // Navigate to UserProfilePage with the user ID
 }
 
+class DressType {
+  final String imageUrl;
+  final String name;
+  final int price;
+  
+  const DressType({
+    this.imageUrl = '',
+    this.name = '', 
+    this.price = 0,
+  });
+}
