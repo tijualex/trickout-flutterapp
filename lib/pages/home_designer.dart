@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trickout/pages/designer/neckpattern.dart';
 import '/components/item_tile.dart';
 import 'user_profile.dart';
 
@@ -142,21 +143,27 @@ class _DesignerHomeState extends State<DesignerHome> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Neck Pattern',Colors.purple)
+                            CustomTile('Manage Top Pattern', Colors.purple)
                           ],
                         ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Sleeve Pattern',Colors.red),
+                            CustomTile('Manage Sleeve Pattern', Colors.red),
                           ],
                         ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Neck Pattern',Colors.green),
+                            GestureDetector(
+                              onTap: () {
+                                navigateToNeckPattern(context);
+                              },
+                              child: CustomTile(
+                                  'Manage Neck Pattern', Colors.green),
+                            ),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -164,14 +171,15 @@ class _DesignerHomeState extends State<DesignerHome> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Sleeve Pattern',Color.fromARGB(255, 38, 145, 190)),
+                            CustomTile('Manage Bottom Pattern',
+                                Color.fromARGB(255, 38, 145, 190)),
                           ],
                         ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage fabrics',Colors.blue),
+                            CustomTile('Manage fabrics', Colors.blue),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -205,13 +213,18 @@ class _DesignerHomeState extends State<DesignerHome> {
   }
 }
 
+void navigateToNeckPattern(BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return NeckPattern();
+  }));
+}
+
 class Order {
   final int id;
   final String status;
 
   Order({required this.id, required this.status});
 }
-
 
 // Custom Tile Widget
 class CustomTile extends StatelessWidget {
