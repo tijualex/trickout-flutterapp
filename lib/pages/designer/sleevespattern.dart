@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import '/pages/user_profile.dart';
 
-class NeckPattern extends StatefulWidget {
+class SleevesPattern extends StatefulWidget {
   @override
-  _NeckPatternState createState() => _NeckPatternState();
+  _SleevesPatternState createState() => _SleevesPatternState();
 }
 
-class _NeckPatternState extends State<NeckPattern> {
+class _SleevesPatternState extends State<SleevesPattern> {
   int _currentIndex = 0;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -34,8 +34,8 @@ class _NeckPatternState extends State<NeckPattern> {
     });
   }
 
-  void addNeckPattern() async {
-    await FirebaseFirestore.instance.collection('neckpattern').add({
+  void addSleevesPattern() async {
+    await FirebaseFirestore.instance.collection('Sleevespattern').add({
       'name': nameController.text,
       'dresstype': selectedDressTypeId,
       'price': double.parse(priceController.text),
@@ -104,8 +104,8 @@ class _NeckPatternState extends State<NeckPattern> {
           bottom: TabBar(
             indicatorColor: Colors.blue,
             tabs: [
-              Tab(text: 'ALL NECK PATTERNS'),
-              Tab(text: 'ADD NEW NECKPATTERN'),
+              Tab(text: 'ALL Sleeves PATTERNS'),
+              Tab(text: 'ADD NEW SleevesPATTERN'),
             ],
             onTap: (index) {
               setState(() {
@@ -123,11 +123,11 @@ class _NeckPatternState extends State<NeckPattern> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: NeckPatternList(),
+                    child: SleevesPatternList(),
                   ),
                   Container(
                     alignment: Alignment.center,
-                    child: buildAddNeckPatternForm(),
+                    child: buildAddSleevesPatternForm(),
                   ),
                 ],
               ),
@@ -138,14 +138,14 @@ class _NeckPatternState extends State<NeckPattern> {
     );
   }
 
-  Widget buildAddNeckPatternForm() {
+  Widget buildAddSleevesPatternForm() {
     return Container(
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Add New Neck Pattern',
+            'Add New Sleeves Pattern',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -192,8 +192,8 @@ class _NeckPatternState extends State<NeckPattern> {
           ),
           SizedBox(height: 16),
           ElevatedButton(
-            onPressed: addNeckPattern,
-            child: Text('Add Neck Pattern'),
+            onPressed: addSleevesPattern,
+            child: Text('Add Sleeves Pattern'),
           ),
         ],
       ),
@@ -225,15 +225,15 @@ class _NeckPatternState extends State<NeckPattern> {
   }
 }
 
-class NeckPatternList extends StatelessWidget {
+class SleevesPatternList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CollectionReference neckPatternCollection =
-        FirebaseFirestore.instance.collection('neckpattern');
+    CollectionReference SleevesPatternCollection =
+        FirebaseFirestore.instance.collection('Sleevespattern');
     return Container(
       alignment: Alignment.center,
       child: StreamBuilder<QuerySnapshot>(
-        stream: neckPatternCollection.snapshots(),
+        stream: SleevesPatternCollection.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -246,7 +246,7 @@ class NeckPatternList extends StatelessWidget {
           List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
 
           if (documents.isEmpty) {
-            return Text('No Neck Patterns available.');
+            return Text('No Sleeves Patterns available.');
           }
 
           return ListView.builder(

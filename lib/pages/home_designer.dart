@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trickout/pages/designer/neckpattern.dart';
+import 'package:trickout/pages/designer/toppattern.dart';
+import 'package:trickout/pages/designer/bottompattern.dart';
+import 'package:trickout/pages/designer/sleevespattern.dart';
 import '/components/item_tile.dart';
 import 'user_profile.dart';
 
@@ -143,14 +146,25 @@ class _DesignerHomeState extends State<DesignerHome> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Top Pattern', Colors.purple)
-                          ],
+                            GestureDetector(
+                              onTap: () {
+                                navigateToTopPattern(context);
+                              },
+                              child: CustomTile(
+                                  'Manage Top Pattern', Colors.green),
+                            ),  ],
                         ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Sleeve Pattern', Colors.red),
+                            GestureDetector(
+                              onTap: () {
+                                navigateToSleevesPattern(context);
+                              },
+                              child: CustomTile(
+                                  'Manage Sleeve Pattern', Colors.green),
+                            ),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -171,10 +185,15 @@ class _DesignerHomeState extends State<DesignerHome> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CustomTile('Manage Bottom Pattern',
-                                Color.fromARGB(255, 38, 145, 190)),
-                          ],
-                        ),
+                            GestureDetector(
+                              onTap: () {
+                                navigateToBottomPattern(context);
+                              },
+                              child: CustomTile(
+                                  'Manage Bottom Pattern', Colors.green),
+                            )
+                          ]
+                            ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -218,6 +237,26 @@ void navigateToNeckPattern(BuildContext context) {
     return NeckPattern();
   }));
 }
+
+void navigateToTopPattern(BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return TopPattern();
+  }));
+}
+
+void navigateToSleevesPattern(BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return SleevesPattern();
+  }));
+}
+
+
+void navigateToBottomPattern(BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return BottomPattern();
+  }));
+}
+
 
 class Order {
   final int id;

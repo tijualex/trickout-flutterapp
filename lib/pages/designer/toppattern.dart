@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import '/pages/user_profile.dart';
 
-class NeckPattern extends StatefulWidget {
+class TopPattern extends StatefulWidget {
   @override
-  _NeckPatternState createState() => _NeckPatternState();
+  _TopPatternState createState() => _TopPatternState();
 }
 
-class _NeckPatternState extends State<NeckPattern> {
+class _TopPatternState extends State<TopPattern> {
   int _currentIndex = 0;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -34,8 +34,8 @@ class _NeckPatternState extends State<NeckPattern> {
     });
   }
 
-  void addNeckPattern() async {
-    await FirebaseFirestore.instance.collection('neckpattern').add({
+  void addTopPattern() async {
+    await FirebaseFirestore.instance.collection('Toppattern').add({
       'name': nameController.text,
       'dresstype': selectedDressTypeId,
       'price': double.parse(priceController.text),
@@ -104,8 +104,8 @@ class _NeckPatternState extends State<NeckPattern> {
           bottom: TabBar(
             indicatorColor: Colors.blue,
             tabs: [
-              Tab(text: 'ALL NECK PATTERNS'),
-              Tab(text: 'ADD NEW NECKPATTERN'),
+              Tab(text: 'ALL Top PATTERNS'),
+              Tab(text: 'ADD NEW TopPATTERN'),
             ],
             onTap: (index) {
               setState(() {
@@ -123,11 +123,11 @@ class _NeckPatternState extends State<NeckPattern> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: NeckPatternList(),
+                    child: TopPatternList(),
                   ),
                   Container(
                     alignment: Alignment.center,
-                    child: buildAddNeckPatternForm(),
+                    child: buildAddTopPatternForm(),
                   ),
                 ],
               ),
@@ -138,14 +138,14 @@ class _NeckPatternState extends State<NeckPattern> {
     );
   }
 
-  Widget buildAddNeckPatternForm() {
+  Widget buildAddTopPatternForm() {
     return Container(
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Add New Neck Pattern',
+            'Add New Top Pattern',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -192,8 +192,8 @@ class _NeckPatternState extends State<NeckPattern> {
           ),
           SizedBox(height: 16),
           ElevatedButton(
-            onPressed: addNeckPattern,
-            child: Text('Add Neck Pattern'),
+            onPressed: addTopPattern,
+            child: Text('Add Top Pattern'),
           ),
         ],
       ),
@@ -225,15 +225,15 @@ class _NeckPatternState extends State<NeckPattern> {
   }
 }
 
-class NeckPatternList extends StatelessWidget {
+class TopPatternList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    CollectionReference neckPatternCollection =
-        FirebaseFirestore.instance.collection('neckpattern');
+    CollectionReference TopPatternCollection =
+        FirebaseFirestore.instance.collection('Toppattern');
     return Container(
       alignment: Alignment.center,
       child: StreamBuilder<QuerySnapshot>(
-        stream: neckPatternCollection.snapshots(),
+        stream: TopPatternCollection.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -246,7 +246,7 @@ class NeckPatternList extends StatelessWidget {
           List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
 
           if (documents.isEmpty) {
-            return Text('No Neck Patterns available.');
+            return Text('No Top Patterns available.');
           }
 
           return ListView.builder(
